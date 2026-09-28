@@ -180,7 +180,7 @@ exec /usr/local/bin/app
 ### With Nix
 
 ```nix
-inputs.nitro-timesync.url = "github:OWNER/nitro-timesync/<rev>";
+inputs.nitro-timesync.url = "github:EnclaviaIO/nitro-timesync/<rev>";
 
 # ...then copy it into the image's root filesystem:
 cp ${nitro-timesync.packages.${system}.default}/bin/nitro-timesync $out/bin/
