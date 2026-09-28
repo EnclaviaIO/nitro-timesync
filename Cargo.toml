@@ -1,0 +1,35 @@
+[package]
+name = "nitro-timesync"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Keeps an AWS Nitro Enclave's wall clock on the Nitro hypervisor's time, read from the timestamp of fresh /dev/nsm attestation documents."
+readme = "README.md"
+keywords = ["nitro", "enclave", "time", "ntp", "aws"]
+categories = ["command-line-utilities", "date-and-time"]
+
+# The binary and package names follow the package name; the library keeps a
+# fixed name so a rename touches only this file and the flake.
+[lib]
+name = "timesync"
+path = "src/lib.rs"
+
+[[bin]]
+name = "nitro-timesync"
+path = "src/main.rs"
+
+[dependencies]
+# Attestation requests against the local /dev/nsm. `nix` enables the
+# driver ioctls; the default features pull in nothing else we need.
+aws-nitro-enclaves-nsm-api = { version = "0.4", default-features = false, features = ["nix"] }
+# COSE_Sign1 envelope and CBOR payload decoding.
+ciborium = "0.2"
+# adjtimex, clock_gettime, fork, pipe, poll.
+libc = "0.2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", default-features = false, features = ["std", "fmt", "env-filter"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
